@@ -46,10 +46,3 @@ Creating new ElectricCar("Tata", 200, 4, 40):
 ```
 
 One `new ElectricCar(...)` prints three constructor lines (the `super` chain). The three `start()` calls go through the same `Vehicle` reference but run different code, which is dynamic dispatch. The full output also shows `describe()` climbing the hierarchy and the `final` method running on all three objects.
-
-## Likely viva questions
-
-- **Multilevel vs multiple inheritance?** Multilevel is an A to B to C chain, which Java allows. Multiple inheritance (one class, two parents) is not allowed for classes - you use interfaces for that.
-- **When is the overridden method chosen?** At runtime, from the object's actual class. This is called late binding.
-- **Can a constructor be final?** No. Constructors aren't inherited, so `final` would mean nothing.
-- **Why make a method final?** To stop subclasses from changing critical behaviour, and it lets the JVM optimize the call.

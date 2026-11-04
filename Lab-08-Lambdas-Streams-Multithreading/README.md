@@ -51,10 +51,3 @@ In this particular capture the unsynchronized total came out 120,165. That numbe
 ```
 
 Three department buckets versus exactly two pass/fail buckets; the missing CIVIL student gives a fallback string instead of a crash; the producer never lets the buffer exceed 3; and the race condition is real (120,165 is not 200,000) and fixed by `synchronized`.
-
-## Likely viva questions
-
-- **What is a functional interface?** An interface with exactly one abstract method, like `Runnable` or `Comparator` - the target type of a lambda.
-- **Why `while` around `wait()` instead of `if`?** Spurious wakeups and multiple waiters mean the condition has to be rechecked after waking.
-- **Why does `balance + 1` race?** It's read, add, write - three steps, and another thread can slip in between and overwrite the result.
-- **start() vs run()?** `start()` spawns a new thread that calls `run()`; calling `run()` directly just runs it on the current thread.

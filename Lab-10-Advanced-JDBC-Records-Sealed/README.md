@@ -17,11 +17,12 @@ Parts B and C use plain Java 17. Part A connects to MySQL 8.0.45 (database `coll
 ```
 javac AdvancedJavaDemo.java
 
-# Parts B and C run on a plain JDK. Part A also needs the driver on the classpath:
-java -cp ".;../lib/mysql-connector-j-8.4.0.jar" AdvancedJavaDemo
+# Parts B and C run on a plain JDK. Part A also needs the MySQL Connector/J
+# driver (download from dev.mysql.com) on the classpath:
+java -cp ".;mysql-connector-j-8.4.0.jar" AdvancedJavaDemo
 ```
 
-Use `:` instead of `;` on Linux or macOS. It uses the same `labuser` / `lab123` login and `college` database as Lab 09 (see that README for the one-time setup). If MySQL isn't reachable, Part A prints a notice and the program carries on with Parts B and C.
+Use `:` instead of `;` on Linux or macOS, and adjust the path to the jar to wherever you saved it. It uses the same `labuser` / `lab123` login and `college` database as Lab 09 (see that README for the one-time setup). If MySQL isn't reachable, Part A prints a notice and the program carries on with Parts B and C.
 
 ## How the code works
 
@@ -60,12 +61,3 @@ Use `:` instead of `;` on Linux or macOS. It uses the same `labuser` / `lab123` 
 ```
 
 Four grade buckets versus exactly two pass/fail partitions; seven distinct courses flattened out of five nested lists; two separate record objects compare equal because records generate value-based `equals`; and `marks=150` is rejected at construction.
-
-## Likely viva questions
-
-- **Record vs regular class?** A record is an immutable data carrier with generated constructor, accessors, `equals`, `hashCode`, and `toString`. A regular class is all manual.
-- **Can a record have setters?** No, the fields are final. You make a new record to change a value.
-- **Why seal a hierarchy?** The compiler knows every possible subtype, which makes switches and `instanceof` chains exhaustive and the model safer.
-- **CallableStatement vs PreparedStatement?** `CallableStatement` invokes stored procedures and supports OUT parameters; `PreparedStatement` runs parameterized SQL.
-- **Savepoint vs rollback?** `rollback()` undoes the whole transaction; `rollback(savepoint)` undoes only back to the bookmark.
-- **Why use a connection pool?** Opening a database connection is expensive, so a pool reuses warm ones.

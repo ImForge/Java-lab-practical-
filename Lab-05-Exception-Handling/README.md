@@ -60,10 +60,3 @@ Every exception is caught and the program still exits cleanly, which is the poin
 ## Checked vs unchecked
 
 Checked exceptions extend `Exception` (but not `RuntimeException`) and the compiler forces you to handle them - they stand for recoverable outside failures like missing files. In this lab that's `InvalidMarksException` and `IOException`. Unchecked exceptions extend `RuntimeException` and usually mean a bug - divide by zero, bad array index, null reference. Here those are `ArithmeticException`, `ArrayIndexOutOfBoundsException`, and `NullPointerException`.
-
-## Likely viva questions
-
-- **throw vs throws?** `throw` raises an exception object; `throws` declares what a method might let propagate.
-- **When does finally not run?** Basically only on `System.exit()` or if the JVM itself dies.
-- **Can one try have several catch blocks?** Yes, ordered subclass before superclass, and you can also combine types with `|` in a multi-catch.
-- **Why make `InvalidMarksException` checked?** Bad marks are a foreseeable data problem the caller should have to deal with.

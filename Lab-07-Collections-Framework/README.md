@@ -54,10 +54,3 @@ java InventorySystem
 ```
 
 Five shipment entries become three unique products, and the orders come out 1, 2, 3, 4 even though they went in as 3, 1, 4, 2.
-
-## Likely viva questions
-
-- **Comparable vs Comparator?** `Comparable` is one natural order baked into the class; `Comparator` is any number of orderings kept outside it.
-- **Why override both `equals()` and `hashCode()`?** A `HashSet` or `HashMap` finds the bucket with `hashCode` and then confirms with `equals`. Break one and dedup or lookup breaks.
-- **Is `PriorityQueue` iteration ordered?** No. Only `poll()` and `peek()` respect priority; iterating gives you the heap's internal order.
-- **ArrayList vs LinkedList?** `ArrayList` has fast random access but slow inserts in the middle; `LinkedList` is the opposite.

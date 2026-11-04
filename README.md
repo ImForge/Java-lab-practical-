@@ -13,8 +13,7 @@ lab/
 │   ├── output.txt                captured console output
 │   ├── screenshots/output-1.png  terminal screenshot
 │   └── README.md                 explanation
-├── Lab-02 ... Lab-10             same structure
-└── lib/mysql-connector-j-8.4.0.jar   JDBC driver for labs 9-10
+└── Lab-02 ... Lab-10             same structure
 ```
 
 ## The experiments
@@ -40,4 +39,4 @@ javac FileName.java
 java ClassName
 ```
 
-Labs 1-8 need nothing but a JDK (17 or newer, since records and sealed classes arrived in Java 16/17). Labs 9 and 10 need a running MySQL server and the Connector/J driver on the classpath - the driver is in `lib/`, and each of those two READMEs has the exact setup and run commands.
+Labs 1-8 need nothing but a JDK (17 or newer, since records and sealed classes arrived in Java 16/17). Labs 9 and 10 need a running MySQL server and the MySQL Connector/J driver on the classpath (download it from [dev.mysql.com](https://dev.mysql.com/downloads/connector/j/)). Each of those two READMEs has the exact setup and run commands.

@@ -59,10 +59,3 @@ The circle's area is 78.54 (pi*5^2) and the triangle's is 6.00 (a 3-4-5 right tr
 | constructors | no | yes |
 | how many per class | many | one |
 | use when | unrelated classes share a capability | related classes share code and state |
-
-## Likely viva questions
-
-- **Can you instantiate an interface or abstract class?** No, only a concrete class that implements or extends it.
-- **What is a default method?** A method with a body inside an interface (since Java 8) that implementers inherit.
-- **Why is `PI` in the interface automatically constant?** Interface fields are implicitly `public static final`.
-- **What about the diamond problem?** If two interfaces give the same default method, the class is forced to override it and resolve the conflict itself.

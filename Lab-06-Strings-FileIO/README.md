@@ -55,10 +55,3 @@ java StringFileOps
 ```
 
 The timing numbers (83 ms vs 1 ms here) show immutability has a real cost in a loop. The records round-trip through the file unchanged. After deserialization `sessionToken` is `null`, which confirms `transient` fields are skipped.
-
-## Likely viva questions
-
-- **Why is `String` immutable in Java?** Security, sharing through the string pool, and safe hashing and threading.
-- **StringBuffer vs StringBuilder?** Same API; `StringBuffer` is synchronized (thread-safe but slower), `StringBuilder` isn't.
-- **What is `serialVersionUID`?** A version stamp checked during deserialization to catch incompatible class changes.
-- **What does transient do?** Keeps a field out of serialization; it comes back as its default value.

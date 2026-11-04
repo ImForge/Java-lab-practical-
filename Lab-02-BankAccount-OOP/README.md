@@ -49,10 +49,3 @@ Operating on Aarav's account (SBI-1001):
 ```
 
 Things the run shows: all four constructors fire (you can see a different message for each), the `(chained: ...)` line prints after the parameterized message which proves `this(...)` runs the target constructor first, the oversized withdrawal is denied, and at the end the copy still holds Rs.5,000 while the original has grown to Rs.6,500 - so the two objects are independent.
-
-## Likely viva questions
-
-- **Does Java have a built-in copy constructor like C++?** No. You write one yourself that takes the same type as a parameter.
-- **What makes constructors overloaded?** Same name, different parameter lists. The compiler resolves the call by signature.
-- **Why are the fields private?** So the balance can only change through `deposit` and `withdraw`, which enforce the rules.
-- **What if you write no constructor at all?** The compiler gives you a no-argument default. Writing any constructor yourself removes that freebie.

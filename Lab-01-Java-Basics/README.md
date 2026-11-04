@@ -53,10 +53,3 @@ Original : "racecar"  ->  Reversed : "racecar"
 ```
 
 The full output is in `output.txt`. A couple of things worth noting: `0!` and `1!` both return 1 (the base case), `15!` shows why `long` was needed, and "racecar" reversing to itself is a quick palindrome sanity check.
-
-## Likely viva questions
-
-- **Why `long` for factorial?** `13!` is about 6 billion, past the `int` maximum of roughly 2.1 billion. `long` holds up to `20!`.
-- **What happens without a base case?** The recursion never stops and you get a `StackOverflowError`.
-- **Why only check up to sqrt(n) for primes?** Factors come in pairs, and one of each pair is always at or below the square root.
-- **Is `charAt()` a built-in reversal method?** No - it just reads one character. The reversal logic is written by hand.

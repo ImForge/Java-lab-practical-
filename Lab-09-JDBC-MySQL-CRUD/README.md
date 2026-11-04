@@ -23,14 +23,14 @@ GRANT ALL PRIVILEGES ON college.* TO 'labuser'@'localhost';
 FLUSH PRIVILEGES;
 ```
 
-Then compile and run with the driver on the classpath (the jar is in `../lib`):
+Download the MySQL Connector/J driver (`mysql-connector-j-8.4.0.jar`) from [dev.mysql.com](https://dev.mysql.com/downloads/connector/j/), then compile and run with it on the classpath:
 
 ```
 javac StudentJDBC.java
-java -cp ".;../lib/mysql-connector-j-8.4.0.jar" StudentJDBC
+java -cp ".;mysql-connector-j-8.4.0.jar" StudentJDBC
 ```
 
-On Linux or macOS use `:` instead of `;` in the classpath. The connection URL has `?createDatabaseIfNotExist=true` so the schema is created automatically if it's missing. Edit the `USER` and `PASS` constants at the top of the file to match your own MySQL login.
+On Linux or macOS use `:` instead of `;` in the classpath. Adjust the path to the jar to wherever you saved it. The connection URL has `?createDatabaseIfNotExist=true` so the schema is created automatically if it's missing. Edit the `USER` and `PASS` constants at the top of the file to match your own MySQL login.
 
 ## How the code works
 
@@ -73,11 +73,3 @@ Connected to MySQL: 8.0.45
 ```
 
 Diya drops from 92 to 82 and Kabir rises from 50.5 to 60.5, so the committed transfer moved exactly 10 marks between two real rows. Aarav stays at 88.5 even though 20 was deducted mid-transaction, which shows the rollback undid the uncommitted change. The batch really added all ten rows.
-
-## Likely viva questions
-
-- **Why PreparedStatement over Statement?** Precompiled (faster when reused) and parameters are data, never SQL, so it's injection-proof.
-- **What does `setAutoCommit(false)` do?** Stops each statement from committing itself; changes wait for your explicit `commit()` or `rollback()`.
-- **What are ACID properties?** Atomicity, consistency, isolation, durability. The transaction here demonstrates atomicity.
-- **What does `executeBatch()` return?** An `int[]` of per-statement update counts.
-- **Which driver type is Connector/J?** Type 4 - a pure-Java driver that speaks MySQL's wire protocol directly.
