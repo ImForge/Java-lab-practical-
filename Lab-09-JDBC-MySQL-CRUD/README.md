@@ -1,130 +1,58 @@
-<div align="center">
+# Lab 09 - JDBC CRUD with MySQL
 
-# 🗄️ Lab 09 — JDBC: MySQL CRUD on a Student Table
+A Java program that connects to MySQL, creates a `student` table, and runs full CRUD four ways: a plain `Statement`, a `PreparedStatement`, a batch insert, and a transaction with commit and rollback. Rows are displayed with a `ResultSet` after each stage.
 
-### *Statement · PreparedStatement · Batch insert ×10 · Transactions (commit / rollback) · ResultSet*
+Course outcome CO5 (database-connected Java applications with JDBC), Bloom level K4.
 
-![Java](https://img.shields.io/badge/Java-17-orange?logo=openjdk&logoColor=white)
-![MySQL](https://img.shields.io/badge/MySQL-8.x-blue?logo=mysql&logoColor=white)
-![CO5](https://img.shields.io/badge/Course_Outcome-CO5-blue)
-![Bloom](https://img.shields.io/badge/Bloom-K4_Analyze-purple)
+This was run against a real MySQL 8.0.45 server (database `college`, user `labuser`) using Connector/J 8.4.0. The screenshot and `output.txt` are the genuine result - the table was really created, filled, batched, and transacted.
 
-</div>
+## Files
 
----
+- `StudentJDBC.java` - the full program, all four techniques
+- `output.txt` - captured output from the live run
+- `screenshots/output-1.png` - screenshot of it running
 
-## 🎯 Aim
+## Setup and running
 
-Connect a Java application to **MySQL**, create a `student` table and implement **full CRUD** using:
-
-| # | Technique | What it demonstrates |
-|---|-----------|----------------------|
-| 1 | `Statement` | Simple, fixed SQL (DDL + one insert) |
-| 2 | `PreparedStatement` | Parameterized (`?`) INSERT & UPDATE — precompiled + SQL-injection safe |
-| 3 | **Batch processing** | 10 records queued with `addBatch()`, sent in **one** round trip |
-| 4 | **Transactions** | Transfer marks between records — `commit()` on success, `rollback()` on failure |
-| ✚ | `ResultSet` | Cursor-based row display after every stage |
-
----
-
-## 📁 Files
-
-| File | Purpose |
-|------|---------|
-| `StudentJDBC.java` | Complete, runnable JDBC program (all 4 techniques) |
-| `output.txt` | **Real captured output** from a live run against MySQL |
-| `README.md` | You are here 👋 |
-
-> ✅ **Verified live:** this program was compiled and executed against a running **MySQL 8.0.45** server (database `college`, user `labuser`) using **MySQL Connector/J 8.4.0**. The screenshot and `output.txt` below are the genuine result — the `college` database and student rows were really created, inserted, updated, batched and transacted.
-
----
-
-## ⚙️ Setup & Run (one time)
+In MySQL, once:
 
 ```sql
--- 1. In MySQL, create the database and a lab user (one time):
 CREATE DATABASE college;
 CREATE USER 'labuser'@'localhost' IDENTIFIED BY 'lab123';
 GRANT ALL PRIVILEGES ON college.* TO 'labuser'@'localhost';
 FLUSH PRIVILEGES;
 ```
 
-```bash
-# 2. Download MySQL Connector/J (mysql-connector-j-8.4.0.jar) from dev.mysql.com
-#    (this repo keeps it in ../lib). Then compile and run:
+Then compile and run with the driver on the classpath (the jar is in `../lib`):
+
+```
 javac StudentJDBC.java
-
-# Windows (the ';' is the classpath separator):
 java -cp ".;../lib/mysql-connector-j-8.4.0.jar" StudentJDBC
-# Linux / macOS (use ':' instead):
-java -cp ".:../lib/mysql-connector-j-8.4.0.jar" StudentJDBC
 ```
 
-> The program connects as `labuser` / `lab123`; the URL uses `?createDatabaseIfNotExist=true` so the `college` schema is auto-created if missing. Edit the `USER` / `PASS` constants at the top of `StudentJDBC.java` to match your own MySQL setup.
+On Linux or macOS use `:` instead of `;` in the classpath. The connection URL has `?createDatabaseIfNotExist=true` so the schema is created automatically if it's missing. Edit the `USER` and `PASS` constants at the top of the file to match your own MySQL login.
 
----
+## How the code works
 
-## 🔍 How the Code Works
+**Statement.** Used for the fixed SQL - creating the table and one plain insert. Fine for one-off queries, but values get glued straight into the SQL string, which is where SQL injection comes from.
 
-### 1️⃣ `Statement` — fixed SQL
-```java
-st.executeUpdate("CREATE TABLE student (id INT PRIMARY KEY, ...)");
-st.executeUpdate("INSERT INTO student VALUES (1, 'Aarav Sharma', 88.5)");
-```
-Fine for DDL and one-off queries — but values are glued into the SQL string, which is where SQL injection lives.
+**PreparedStatement.** The SQL is written once with `?` placeholders and the values are supplied separately as typed parameters. It's precompiled, so it's faster on repeats, and the values are treated as data rather than SQL, so injection isn't possible.
 
-### 2️⃣ `PreparedStatement` — placeholders
-```java
-PreparedStatement ps = con.prepareStatement(
-    "INSERT INTO student (id, name, marks) VALUES (?, ?, ?)");
-ps.setInt(1, 2);  ps.setString(2, "Diya Patel");  ps.setDouble(3, 92.0);
-ps.executeUpdate();
-```
-The SQL is **precompiled once**; values travel separately as typed parameters → faster on repeats and injection-proof.
+**Batch.** Ten inserts are queued with `addBatch()` and sent together with `executeBatch()`, which returns an array of per-row update counts - one network round trip instead of ten.
 
-### 3️⃣ Batch — 10 inserts, 1 network trip
-```java
-for (int i = 0; i < 10; i++) { ps.setInt(1, 100+i); ...; ps.addBatch(); }
-int[] counts = ps.executeBatch();   // all 10 fired together
-```
+**Transaction.** With `setAutoCommit(false)`, the code deducts 10 marks from one student and adds 10 to another, then commits - both updates happen together. A second transfer deliberately throws partway through, and `rollback()` undoes the uncommitted deduction. That's the all-or-nothing property of a transaction.
 
-### 4️⃣ Transactions — all or nothing
-```java
-con.setAutoCommit(false);              // take manual control
-take.executeUpdate();                  // -10 marks from id 2
-give.executeUpdate();                  // +10 marks to id 3
-con.commit();                          // ✅ both become permanent together
+## Screenshot
 
-// … second transfer deliberately fails mid-way …
-con.rollback();                        // ⏪ the uncommitted deduction is UNDONE
-```
-> 💡 This is the bank-transfer property: **either both updates happen or neither does.** The demo deliberately throws after the deduction to prove `rollback()` restores the row.
+![Lab 09 running against MySQL](screenshots/output-1.png)
 
-### `ResultSet` — reading rows
-```java
-ResultSet rs = st.executeQuery("SELECT id, name, marks FROM student ORDER BY id");
-while (rs.next())                       // cursor moves row by row
-    rs.getInt("id"); rs.getString("name"); rs.getDouble("marks");
-```
-
----
-
-## 📸 Live Terminal Screenshot (real MySQL run)
-
-> Genuine screenshot of `StudentJDBC` running against **MySQL 8.0.45** in Windows Terminal on Windows 11 — the `college` database and `student` table were really created, populated, batched and transacted.
-
-![Lab 09 terminal output](screenshots/output-1.png)
-
----
-
-## 📟 Output (live run — full version in `output.txt`)
+## Output
 
 ```text
 Connected to MySQL: 8.0.45
 
  1. Statement - CREATE TABLE + simple INSERT/SELECT
   Table 'student' created.
-  Statement INSERT -> 1 row affected.
 
  2. PreparedStatement - parameterized INSERT and UPDATE
   2 rows inserted via placeholders (?) - SQL-injection safe.
@@ -135,7 +63,6 @@ Connected to MySQL: 8.0.45
 
  4. TRANSACTION - transfer 10 marks, commit; then rollback demo
   Transfer of 10 marks (id 2 -> id 3) COMMITTED.
-  Deducted 20 from id 1 (not yet committed)...
   ERROR: Simulated failure before crediting the receiver!
   ROLLBACK executed - id 1's marks are unchanged.
 
@@ -145,19 +72,12 @@ Connected to MySQL: 8.0.45
   3   Kabir Singh    60.5     <- received 10    (50.5 -> 60.5)
 ```
 
-### 🧾 What the output proves
-- **Diya 92.0 → 82.0** and **Kabir 50.5 → 60.5**: the committed transfer moved exactly 10 marks between two real database rows.
-- **Aarav stays 88.5** even though 20 was deducted mid-transaction: `rollback()` erased the uncommitted change.
-- **13 rows after batch** (3 individual + 10 batched): `executeBatch()` really inserted all ten in one round trip.
+Diya drops from 92 to 82 and Kabir rises from 50.5 to 60.5, so the committed transfer moved exactly 10 marks between two real rows. Aarav stays at 88.5 even though 20 was deducted mid-transaction, which shows the rollback undid the uncommitted change. The batch really added all ten rows.
 
----
+## Likely viva questions
 
-## 🎤 Viva-Voce Quick Prep
-
-| Question | Answer |
-|----------|--------|
-| Why PreparedStatement over Statement? | Precompiled (faster when reused) + parameters are data, never SQL → injection-proof. |
-| What does `setAutoCommit(false)` do? | Stops each statement committing itself; changes wait for your explicit `commit()`/`rollback()`. |
-| What are ACID properties? | Atomicity, Consistency, Isolation, Durability — the transaction demo shows Atomicity. |
-| What does `executeBatch()` return? | An `int[]` of per-statement update counts. |
-| Which JDBC driver type is Connector/J? | Type 4 — pure-Java "thin" driver speaking MySQL's wire protocol directly. |
+- **Why PreparedStatement over Statement?** Precompiled (faster when reused) and parameters are data, never SQL, so it's injection-proof.
+- **What does `setAutoCommit(false)` do?** Stops each statement from committing itself; changes wait for your explicit `commit()` or `rollback()`.
+- **What are ACID properties?** Atomicity, consistency, isolation, durability. The transaction here demonstrates atomicity.
+- **What does `executeBatch()` return?** An `int[]` of per-statement update counts.
+- **Which driver type is Connector/J?** Type 4 - a pure-Java driver that speaks MySQL's wire protocol directly.

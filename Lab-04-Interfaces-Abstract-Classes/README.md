@@ -1,160 +1,68 @@
-<div align="center">
+# Lab 04 - Interfaces and Abstract Classes
 
-# 📐 Lab 04 — Interfaces & Abstract Classes
+A `Shape` interface with `area()` and `perimeter()`, implemented by `Circle`, `Rectangle`, and `Triangle`; an abstract `Polygon` class with a concrete `describe()` method; a class implementing two interfaces at once; and a driver that compares how interfaces and abstract classes behave.
 
-### *`Shape` interface · `Polygon` abstract class · multiple interface implementation*
+Course outcome CO2 (apply interfaces and abstract classes for modular design), Bloom level K3.
 
-![Java](https://img.shields.io/badge/Java-17-orange?logo=openjdk&logoColor=white)
-![CO2](https://img.shields.io/badge/Course_Outcome-CO2-blue)
-![Bloom](https://img.shields.io/badge/Bloom-K3_Apply-green)
-![Status](https://img.shields.io/badge/Output-Verified_✓-success)
+## Files
 
-</div>
+- `ShapeDemo.java` - the interfaces, the abstract class, three shapes, and a driver
+- `output.txt` - console output from an actual run
+- `screenshots/output-1.png` - screenshot of it running
 
----
+## Running it
 
-## 🎯 Aim
-
-- ✅ Interface **`Shape`** with abstract methods `area()` and `perimeter()`, implemented by **Circle, Rectangle, Triangle**
-- ✅ Abstract class **`Polygon`** with a **concrete** `describe()` method
-- ✅ **Multiple interface implementation** (`Shape` + `Drawable`)
-- ✅ A **driver class** comparing interface vs abstract-class behaviour
-
-```mermaid
-classDiagram
-    class Shape { <<interface>> +area() +perimeter() +printReport() «default» }
-    class Drawable { <<interface>> +draw() }
-    class Polygon { <<abstract>> #int sides +describe() «concrete» }
-    Shape <|.. Circle
-    Drawable <|.. Circle
-    Shape <|.. Polygon
-    Polygon <|-- Rectangle
-    Drawable <|.. Rectangle
-    Polygon <|-- Triangle
 ```
-
----
-
-## 📁 Files
-
-| File | Purpose |
-|------|---------|
-| `ShapeDemo.java` | Interfaces, abstract class, 3 shapes + driver class |
-| `output.txt` | Actual captured program output |
-| `README.md` | You are here 👋 |
-
----
-
-## ⚙️ How to Run
-
-```bash
 javac ShapeDemo.java
 java ShapeDemo
 ```
 
----
+## How the code works
 
-## 🔍 How the Code Works
+`Shape` is the contract: any class that implements it must provide `area()` and `perimeter()`. It also has a `default` method, `printReport()`, which has a body that every implementer inherits for free.
 
-### The contract (interface)
+`Polygon` is abstract and implements `Shape`. It holds a field (`sides`) and a concrete `describe()` method - things an interface can't really do. `Rectangle` and `Triangle` extend `Polygon` because they genuinely are polygons, while `Circle` implements `Shape` directly since a circle has no sides. Lining the types up with reality like this is what the "modular design" in the outcome means.
 
-```java
-interface Shape {
-    double area();        // every shape MUST say how to compute these…
-    double perimeter();
-    default void printReport() { ... }   // …and gets this report method for free
-}
-```
+Implementing two interfaces is shown by `Circle`, which is both a `Shape` and a `Drawable`. `Rectangle` does it the other way - it extends `Polygon` (getting `Shape` through it) and adds `Drawable`. A class gets one superclass but any number of interfaces, and the demo shows both routes.
 
-### The partial implementation (abstract class)
+The triangle's area uses Heron's formula so it works for any valid triangle, not just right triangles.
 
-```java
-abstract class Polygon implements Shape {
-    protected int sides;                 // STATE — something an interface can't hold
-    void describe() { ... }              // CONCRETE method inherited by subclasses
-}
-```
+## Screenshot
 
-`Rectangle` and `Triangle` extend `Polygon` (they are genuine polygons); `Circle` implements `Shape` directly (a circle has no sides). The type hierarchy mirrors reality — that's **modular design**.
+![Lab 04 running in the terminal](screenshots/output-1.png)
 
-### Multiple interface implementation
-
-```java
-class Circle implements Shape, Drawable { ... }               // two at once
-class Rectangle extends Polygon implements Drawable { ... }   // extends + implements
-```
-
-A Java class gets **one** superclass but **any number** of interfaces — the demo shows both routes to the same capability.
-
-### Triangle's area — Heron's formula
-
-```java
-double s = perimeter() / 2;                       // semi-perimeter
-return Math.sqrt(s * (s-a) * (s-b) * (s-c));      // works for ANY valid triangle
-```
-
----
-
-## 📸 Live Terminal Screenshot
-
-> Genuine screenshot of `ShapeDemo` compiled with `javac` and run in Windows Terminal on Windows 11 (JDK 17) — not a mock-up.
-
-![Lab 04 terminal output](screenshots/output-1.png)
-
----
-
-## 📟 Output (actual run)
+## Output
 
 ```text
- 1. INTERFACE CONTRACT — area() & perimeter() for each shape
+ 1. INTERFACE CONTRACT - area() & perimeter() for each shape
   Circle     | area =      78.54 | perimeter =      31.42
   Rectangle  | area =      24.00 | perimeter =      22.00
   Triangle   | area =       6.00 | perimeter =      12.00
 
- 2. ABSTRACT CLASS — concrete describe() inherited by subclasses
+ 2. ABSTRACT CLASS - concrete describe() inherited by subclasses
   I am a Rectangle, a polygon with 4 sides.
   I am a Triangle, a polygon with 3 sides.
 
- 3. MULTIPLE INTERFACE IMPLEMENTATION — Shape + Drawable
+ 3. MULTIPLE INTERFACE IMPLEMENTATION - Shape + Drawable
   Drawing Circle    : ( O )  radius=5.0
   Drawing Rectangle : [=====]  8.0 x 3.0
 ```
 
-<details>
-<summary>📜 <b>Click for the FULL captured output</b> (also in <code>output.txt</code>)</summary>
+The circle's area is 78.54 (pi*5^2) and the triangle's is 6.00 (a 3-4-5 right triangle), so the implementations are correct. `describe()` runs in the subclasses without being written there, which shows an abstract class passing concrete behaviour down. The driver holds all three shapes in one `Shape[]`, so polymorphism works through the interface just like it would through a superclass.
 
-See [`output.txt`](./output.txt) — includes section 4, the observed interface-vs-abstract-class comparison.
+## Interface vs abstract class
 
-</details>
-
-### 🧾 What the output proves
-
-| Observation | Concept verified |
-|-------------|------------------|
-| Circle area 78.54 (= π·5²), Triangle area 6.00 (3-4-5 right triangle) | The interface contract is implemented correctly by each class |
-| `describe()` runs in Rectangle/Triangle without being written there | Abstract classes pass **concrete** behaviour down |
-| One `Shape[]` array held all three shapes | Interfaces give polymorphism, just like superclasses |
-| Circle draws *and* reports | One class can honour **multiple** interfaces |
-
----
-
-## ⚖️ Interface vs Abstract Class — one-glance table
-
-| | Interface `Shape` | Abstract class `Polygon` |
+| | interface `Shape` | abstract class `Polygon` |
 |---|---|---|
-| State (fields) | ❌ only `public static final` constants | ✅ real instance fields (`sides`) |
-| Concrete methods | `default`/`static` only | ✅ any number |
-| Constructors | ❌ | ✅ (called via `super`) |
-| How many can a class take? | **Many** (`implements A, B, …`) | **One** (`extends`) |
-| Use when… | unrelated classes share a *capability* | related classes share *code + state* |
+| instance fields | no (only constants) | yes (`sides`) |
+| concrete methods | only `default`/`static` | any number |
+| constructors | no | yes |
+| how many per class | many | one |
+| use when | unrelated classes share a capability | related classes share code and state |
 
----
+## Likely viva questions
 
-## 🎤 Viva-Voce Quick Prep
-
-| Question | Answer |
-|----------|--------|
-| Can you instantiate an interface or abstract class? | No — only concrete subclasses/implementations. |
-| What is a `default` method? | A method **with a body** inside an interface (Java 8+) that implementers inherit. |
-| Why is `PI` in the interface automatically constant? | Interface fields are implicitly `public static final`. |
-| Diamond problem in Java? | Two interfaces with the same default method force the class to override it — conflict resolved explicitly. |
+- **Can you instantiate an interface or abstract class?** No, only a concrete class that implements or extends it.
+- **What is a default method?** A method with a body inside an interface (since Java 8) that implementers inherit.
+- **Why is `PI` in the interface automatically constant?** Interface fields are implicitly `public static final`.
+- **What about the diamond problem?** If two interfaces give the same default method, the class is forced to override it and resolve the conflict itself.

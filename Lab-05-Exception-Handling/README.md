@@ -1,96 +1,41 @@
-<div align="center">
+# Lab 05 - Exception Handling
 
-# 🛡️ Lab 05 — Exception Handling (Student Grade System)
+A small student grade system that demonstrates a custom exception, try-catch-finally, multi-catch, throw and throws, and the difference between checked and unchecked exceptions.
 
-### *Custom `InvalidMarksException` · try-catch-finally · multi-catch · throw/throws · checked vs unchecked*
+Course outcome CO3 (implement robust exception handling), Bloom level K3.
 
-![Java](https://img.shields.io/badge/Java-17-orange?logo=openjdk&logoColor=white)
-![CO3](https://img.shields.io/badge/Course_Outcome-CO3-blue)
-![Bloom](https://img.shields.io/badge/Bloom-K3_Apply-green)
-![Status](https://img.shields.io/badge/Output-Verified_✓-success)
+## Files
 
-</div>
+- `GradeSystem.java` - the custom exception and five scenarios
+- `output.txt` - console output from an actual run
+- `screenshots/output-1.png` - screenshot of it running
 
----
+## Running it
 
-## 🎯 Aim
-
-Simulate a student grade system demonstrating:
-
-- ✅ **Custom exception** `InvalidMarksException` thrown when marks ∉ (0–100)
-- ✅ **try-catch-finally** blocks
-- ✅ **Multi-catch** blocks (`catch (A | B e)`)
-- ✅ **`throw`** and **`throws`**
-- ✅ **Checked** (`IOException`) and **unchecked** (`ArithmeticException`, `ArrayIndexOutOfBoundsException`) exceptions in separate scenarios
-
----
-
-## 📁 Files
-
-| File | Purpose |
-|------|---------|
-| `GradeSystem.java` | Custom exception + 5 handling scenarios |
-| `output.txt` | Actual captured program output |
-| `README.md` | You are here 👋 |
-
----
-
-## ⚙️ How to Run
-
-```bash
+```
 javac GradeSystem.java
 java GradeSystem
 ```
 
----
+## How the code works
 
-## 🔍 How the Code Works
+`InvalidMarksException` extends `Exception`, which makes it a checked exception - the compiler won't let a caller ignore it. The `computeGrade` method declares `throws InvalidMarksException` in its signature and uses `throw` to raise one when the marks fall outside 0-100. So `throws` is the warning on the method and `throw` is the thing that actually fires.
 
-### The custom exception — `throw` + `throws`
+There are five scenarios:
 
-```java
-class InvalidMarksException extends Exception { ... }   // extends Exception → CHECKED
+1. Valid and invalid marks, caught with try-catch and a `finally` block that runs either way.
+2. An `ArithmeticException` from dividing by zero (averaging over zero subjects).
+3. An `ArrayIndexOutOfBoundsException` from reading past the end of an array.
+4. An `IOException` from opening a file that doesn't exist - the compiler forces this one to be handled, which is what "checked" means.
+5. A single try block that can fail three different ways, handled by a multi-catch (`catch (A | B e)`) plus a separate catch for `NullPointerException`.
 
-static String computeGrade(String student, int marks)
-        throws InvalidMarksException {                  // 'throws' → warns the caller
-    if (marks < 0 || marks > 100)
-        throw new InvalidMarksException(...);           // 'throw'  → raises it
-    ...
-}
-```
+The `finally` line prints after both the success case and the failure cases, which is the thing to notice about `finally` - it runs no matter what.
 
-> 💡 **`throw`** fires one exception object; **`throws`** is a method-signature *declaration* that forces callers to handle it. Extending `Exception` (not `RuntimeException`) makes it **checked** — the compiler refuses to let you ignore it.
+## Screenshot
 
-### The five scenarios
+![Lab 05 running in the terminal](screenshots/output-1.png)
 
-| # | Scenario | Exception | Type |
-|---|----------|-----------|------|
-| 1 | Marks −5 and 104 | `InvalidMarksException` + `finally` | custom, checked |
-| 2 | Average with 0 subjects | `ArithmeticException` (`/ by zero`) | unchecked |
-| 3 | `scores[5]` on a length-3 array | `ArrayIndexOutOfBoundsException` | unchecked |
-| 4 | Opening a missing file | `IOException` | **checked** |
-| 5 | One `try`, three failure modes | multi-catch `A \| B` + separate `NullPointerException` catch | mixed |
-
-### `finally` always runs
-
-```java
-} finally {
-    System.out.println("(finally) record for " + students[i] + " processed.");
-}
-```
-The output shows this line for Aarav (success) **and** for Diya/Kabir (failures) — `finally` is the cleanup slot that runs no matter what.
-
----
-
-## 📸 Live Terminal Screenshot
-
-> Genuine screenshot of `GradeSystem` compiled with `javac` and run in Windows Terminal on Windows 11 (JDK 17) — not a mock-up.
-
-![Lab 05 terminal output](screenshots/output-1.png)
-
----
-
-## 📟 Output (actual run)
+## Output
 
 ```text
   Aarav scored 92 -> Grade A+
@@ -107,44 +52,18 @@ The output shows this line for Aarav (success) **and** for Diya/Kabir (failures)
   [MULTI-CATCH] handled ArrayIndexOutOfBoundsException : Index 9 out of bounds for length 2
   [SEPARATE CATCH] handled NullPointerException
 
-  All scenarios handled — program terminated NORMALLY (exit code 0).
+  All scenarios handled - program terminated NORMALLY (exit code 0).
 ```
 
-<details>
-<summary>📜 <b>Click for the FULL captured output</b> (also in <code>output.txt</code>)</summary>
+Every exception is caught and the program still exits cleanly, which is the point - handled exceptions don't crash anything.
 
-See [`output.txt`](./output.txt) — all five scenarios with section banners and every `finally` line.
+## Checked vs unchecked
 
-</details>
+Checked exceptions extend `Exception` (but not `RuntimeException`) and the compiler forces you to handle them - they stand for recoverable outside failures like missing files. In this lab that's `InvalidMarksException` and `IOException`. Unchecked exceptions extend `RuntimeException` and usually mean a bug - divide by zero, bad array index, null reference. Here those are `ArithmeticException`, `ArrayIndexOutOfBoundsException`, and `NullPointerException`.
 
-### 🧾 What the output proves
+## Likely viva questions
 
-| Observation | Concept verified |
-|-------------|------------------|
-| −5 and 104 both rejected with our own message | Custom exception + `throw` + `throws` work end-to-end |
-| `(finally)` prints after success **and** failure | `finally` is unconditional |
-| One handler caught two different exception types | Multi-catch collapses duplicate handlers |
-| The compiler *forced* the `IOException` catch | That's exactly what "checked" means |
-| Final line + exit code 0 | Handled exceptions don't crash the program |
-
----
-
-## 🧭 Checked vs Unchecked — one-glance table
-
-| | Checked | Unchecked |
-|---|---|---|
-| Parent | `Exception` (minus `RuntimeException`) | `RuntimeException` |
-| Compiler forces handling? | ✅ yes | ❌ no |
-| Represents | recoverable external failures (files, network) | programming bugs (÷0, bad index, null) |
-| This lab | `InvalidMarksException`, `IOException` | `ArithmeticException`, `ArrayIndexOutOfBoundsException`, `NullPointerException` |
-
----
-
-## 🎤 Viva-Voce Quick Prep
-
-| Question | Answer |
-|----------|--------|
-| `throw` vs `throws`? | `throw` raises an exception object; `throws` declares what a method may propagate. |
-| When does `finally` NOT run? | Practically only on `System.exit()` or JVM death. |
-| Can one `try` have multiple `catch` blocks? | Yes — ordered subclass → superclass; plus multi-catch with `\|`. |
-| Why make `InvalidMarksException` checked? | Invalid marks are a *foreseeable* data problem the caller should be forced to handle. |
+- **throw vs throws?** `throw` raises an exception object; `throws` declares what a method might let propagate.
+- **When does finally not run?** Basically only on `System.exit()` or if the JVM itself dies.
+- **Can one try have several catch blocks?** Yes, ordered subclass before superclass, and you can also combine types with `|` in a multi-catch.
+- **Why make `InvalidMarksException` checked?** Bad marks are a foreseeable data problem the caller should have to deal with.

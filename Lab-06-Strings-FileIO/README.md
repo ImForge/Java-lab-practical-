@@ -1,152 +1,64 @@
-<div align="center">
+# Lab 06 - Strings and File I/O
 
-# 🧵 Lab 06 — Strings & File I/O
+Four parts: string operations (palindrome, word count, character frequency), a speed comparison of `String` vs `StringBuffer` vs `StringBuilder`, writing and reading student records with buffered I/O, and serializing an object to a file and back.
 
-### *Palindrome / word count / char frequency · String vs StringBuffer vs StringBuilder · BufferedWriter/Reader · Serialization*
+Course outcome CO3 (string operations and file I/O), Bloom level K3.
 
-![Java](https://img.shields.io/badge/Java-17-orange?logo=openjdk&logoColor=white)
-![CO3](https://img.shields.io/badge/Course_Outcome-CO3-blue)
-![Bloom](https://img.shields.io/badge/Bloom-K3_Apply-green)
-![Status](https://img.shields.io/badge/Output-Verified_✓-success)
+## Files
 
-</div>
+- `StringFileOps.java` - all four parts plus a serializable `Student` class
+- `output.txt` - console output from an actual run
+- `screenshots/output-1.png` - screenshot of it running
 
----
+The program creates `students.txt` and `student.ser` while it runs and deletes them at the end, so the folder stays clean.
 
-## 🎯 Aim
+## Running it
 
-Write programs to:
-
-| # | Task |
-|---|------|
-| 1 | String operations — **palindrome check**, **word count**, **character frequency** |
-| 2 | Compare **String vs StringBuffer vs StringBuilder** performance |
-| 3 | Write student records to a text file with **BufferedWriter**, read back with **BufferedReader** |
-| 4 | **Serialize** a `Student` object to a file and **deserialize** it back |
-
----
-
-## 📁 Files
-
-| File | Purpose |
-|------|---------|
-| `StringFileOps.java` | All four parts + a `Serializable` `Student` class |
-| `output.txt` | Actual captured program output |
-| `README.md` | You are here 👋 |
-
-> ℹ️ The program creates `students.txt` and `student.ser` while running and **deletes them at the end**, so the folder stays clean.
-
----
-
-## ⚙️ How to Run
-
-```bash
+```
 javac StringFileOps.java
 java StringFileOps
 ```
 
----
+## How the code works
 
-## 🔍 How the Code Works
+**String operations.** The palindrome check strips out anything that isn't a letter or digit, lowercases the rest, and compares with two pointers moving in from both ends, so "A man, a plan, a canal: Panama" comes out true. Word count splits on runs of whitespace. Character frequency counts letters into a `TreeMap` so the result comes out sorted.
 
-### 1️⃣ String operations
-```java
-// palindrome: strip non-alphanumerics, lowercase, two-pointer scan
-String clean = s.replaceAll("[^A-Za-z0-9]", "").toLowerCase();
+**The speed comparison.** The program appends a single character 20,000 times, three ways. `String` is slow because strings are immutable - every `+=` builds a brand-new object, so the total work is O(n^2). `StringBuffer` and `StringBuilder` append into an internal array instead, which is O(n). `StringBuffer` is synchronized (thread-safe) and `StringBuilder` isn't, which is why `StringBuilder` is the usual choice in single-threaded code. The exact times vary per run, but the gap between `String` and the other two is large and grows with the count.
 
-// word count: split on runs of whitespace
-trimmed.split("\\s+").length;
+**Buffered I/O.** Records are written with `BufferedWriter` and read back with `BufferedReader`, both inside try-with-resources so the streams always close. Buffering batches lots of small writes into a few disk operations.
 
-// char frequency: TreeMap + merge() → sorted counts in 1 line per char
-freq.merge(c, 1, Integer::sum);
-```
-The two-pointer palindrome handles `"A man, a plan, a canal: Panama"` correctly because punctuation is stripped first.
+**Serialization.** A `Student` object is written to a file with `ObjectOutputStream` and read back with `ObjectInputStream`. The `sessionToken` field is marked `transient`, so it isn't written and comes back as `null` - that's the thing to notice.
 
-### 2️⃣ The performance shoot-out (20,000 appends)
+## Screenshot
 
-| Class | Mutability | Thread-safe | Measured time |
-|-------|-----------|-------------|---------------|
-| `String` | ❌ immutable | — | **60 ms** 🐌 |
-| `StringBuffer` | ✅ mutable | ✅ synchronized | **1 ms** |
-| `StringBuilder` | ✅ mutable | ❌ (faster) | **1 ms** ⚡ |
+![Lab 06 running in the terminal](screenshots/output-1.png)
 
-> 💡 `s += "x"` copies the **entire** string every iteration → O(n²) total work. The builders append into an internal array → O(n). That's a ~60× gap at just 20k appends, and it grows quadratically. *(Timings vary slightly per run/machine.)*
-
-### 3️⃣ Buffered file I/O — try-with-resources
-```java
-try (BufferedWriter bw = new BufferedWriter(new FileWriter(recordsFile))) {
-    bw.write("101,Aarav Sharma,88.5");
-    bw.newLine();
-}   // auto-closed here, even if an exception occurs
-```
-Buffering batches many small writes into few disk operations; `try-with-resources` guarantees the stream closes.
-
-### 4️⃣ Serialization — objects to bytes and back
-```java
-class Student implements Serializable {
-    transient String sessionToken;   // ← excluded from the byte stream
-}
-oos.writeObject(original);           // object → 94 bytes on disk
-Student restored = (Student) ois.readObject();   // bytes → object
-```
-
----
-
-## 📸 Live Terminal Screenshot
-
-> Genuine screenshot of `StringFileOps` compiled with `javac` and run in Windows Terminal on Windows 11 (JDK 17) — not a mock-up. (The String-vs-Builder timings vary slightly per run/machine.)
-
-![Lab 06 terminal output](screenshots/output-1.png)
-
----
-
-## 📟 Output (actual run)
+## Output
 
 ```text
   "madam" is palindrome? true
-  "Java" is palindrome? false
   "A man, a plan, a canal: Panama" is palindrome? true
 
   Word count : 9
   Char frequency (letters only): {a=1, g=2, i=1, m=2, n=1, o=1, p=1, r=2}
 
-  String        (immutable)          :     60 ms
+  String        (immutable)          :     83 ms
   StringBuffer  (mutable, sync)      :      1 ms
   StringBuilder (mutable, non-sync)  :      1 ms
 
-  Reading them back line by line:
     ID 101  | Aarav Sharma    | marks 88.5
     ID 102  | Diya Patel      | marks 92.0
     ID 103  | Kabir Singh     | marks 76.25
 
   Before serialization : Student{id=104, name='Meera Iyer', marks=95.5, sessionToken=TOKEN-XYZ-123}
-  Object written to student.ser (94 bytes)
   After deserialization: Student{id=104, name='Meera Iyer', marks=95.5, sessionToken=null}
 ```
 
-<details>
-<summary>📜 <b>Click for the FULL captured output</b> (also in <code>output.txt</code>)</summary>
+The timing numbers (83 ms vs 1 ms here) show immutability has a real cost in a loop. The records round-trip through the file unchanged. After deserialization `sessionToken` is `null`, which confirms `transient` fields are skipped.
 
-See [`output.txt`](./output.txt) — all four sections including the cleanup confirmation line.
+## Likely viva questions
 
-</details>
-
-### 🧾 What the output proves
-
-| Observation | Concept verified |
-|-------------|------------------|
-| Panama sentence → `true` | Normalization before the two-pointer check works |
-| 60 ms vs 1 ms | Immutability has a real, measurable cost in loops |
-| 3 records written then read back identical | Buffered writer/reader round-trip is lossless |
-| `sessionToken=null` after deserialization | `transient` fields are **skipped** by serialization — exactly as designed |
-
----
-
-## 🎤 Viva-Voce Quick Prep
-
-| Question | Answer |
-|----------|--------|
-| Why is `String` immutable in Java? | Security, string-pool sharing, safe hashing/threading. |
-| StringBuffer vs StringBuilder? | Same API; Buffer is synchronized (thread-safe, slower), Builder is not (faster). |
-| What is `serialVersionUID`? | A version stamp checked at deserialization to detect incompatible class changes. |
-| What does `transient` do? | Excludes a field from serialization; it comes back as its default value (`null`/0). |
+- **Why is `String` immutable in Java?** Security, sharing through the string pool, and safe hashing and threading.
+- **StringBuffer vs StringBuilder?** Same API; `StringBuffer` is synchronized (thread-safe but slower), `StringBuilder` isn't.
+- **What is `serialVersionUID`?** A version stamp checked during deserialization to catch incompatible class changes.
+- **What does transient do?** Keeps a field out of serialization; it comes back as its default value.
