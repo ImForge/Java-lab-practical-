@@ -1,0 +1,61 @@
+Connected to MySQL: 8.0.45
+
+==============================================================
+ 1. Statement - CREATE TABLE + simple INSERT/SELECT
+==============================================================
+  Table 'student' created.
+  Statement INSERT -> 1 row affected.
+
+  --- After Statement insert ---
+  ID    NAME                 MARKS 
+  1     Aarav Sharma         88.5  
+
+==============================================================
+ 2. PreparedStatement - parameterized INSERT and UPDATE
+==============================================================
+  2 rows inserted via placeholders (?) - SQL-injection safe.
+  PreparedStatement UPDATE -> 1 row (Kabir 45.0 -> 50.5).
+
+  --- After PreparedStatement insert/update ---
+  ID    NAME                 MARKS 
+  1     Aarav Sharma         88.5  
+  2     Diya Patel           92.0  
+  3     Kabir Singh          50.5  
+
+==============================================================
+ 3. BATCH - 10 records inserted in ONE round trip
+==============================================================
+  executeBatch() returned 10 results -> total rows inserted: 10
+
+  --- After batch insert (13 rows total) ---
+  ID    NAME                 MARKS 
+  1     Aarav Sharma         88.5  
+  2     Diya Patel           92.0  
+  3     Kabir Singh          50.5  
+  100   Meera                60.0  
+  101   Ishan                63.5  
+  102   Zara                 67.0  
+  103   Vivaan               70.5  
+  104   Anaya                74.0  
+  105   Reyansh              77.5  
+  106   Kiara                81.0  
+  107   Arjun                84.5  
+  108   Sara                 88.0  
+  109   Dev                  91.5  
+
+==============================================================
+ 4. TRANSACTION - transfer 10 marks, commit; then rollback demo
+==============================================================
+  Transfer of 10 marks (id 2 -> id 3) COMMITTED.
+  Deducted 20 from id 1 (not yet committed)...
+  ERROR: Simulated failure before crediting the receiver!
+  ROLLBACK executed - id 1's marks are unchanged.
+
+  --- Final state of ids 1-3 (committed transfer + rollback proof) ---
+  ID    NAME                 MARKS 
+  1     Aarav Sharma         88.5  
+  2     Diya Patel           82.0  
+  3     Kabir Singh          60.5  
+  (the 10 batched rows 100-109 are untouched - see batch section above)
+
+  All four JDBC techniques demonstrated successfully.

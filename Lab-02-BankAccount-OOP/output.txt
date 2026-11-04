@@ -1,0 +1,62 @@
+=================================================
+ 1. CREATING OBJECTS WITH DIFFERENT CONSTRUCTORS
+=================================================
+[Default constructor] called -> empty account created
+[Parameterized constructor] called -> account SBI-1001 created for Aarav Sharma
+[Parameterized constructor] called -> account SBI-1002 created for Diya Patel
+   (chained: opening balance defaulted to 0.0)
+[Copy constructor] called -> cloned account of Aarav Sharma
+
+=================================================
+ 2. INITIAL STATE OF ALL FOUR OBJECTS
+=================================================
+  +--------------------------------------+
+  | A/C No : NOT-ASSIGNED                |
+  | Holder : Unknown                     |
+  | Balance: Rs.0.00                     |
+  +--------------------------------------+
+  +--------------------------------------+
+  | A/C No : SBI-1001                    |
+  | Holder : Aarav Sharma                |
+  | Balance: Rs.5,000.00                 |
+  +--------------------------------------+
+  +--------------------------------------+
+  | A/C No : SBI-1002                    |
+  | Holder : Diya Patel                  |
+  | Balance: Rs.0.00                     |
+  +--------------------------------------+
+  +--------------------------------------+
+  | A/C No : SBI-1001-COPY               |
+  | Holder : Aarav Sharma                |
+  | Balance: Rs.5,000.00                 |
+  +--------------------------------------+
+
+=================================================
+ 3. DEPOSITS AND WITHDRAWALS (WITH BALANCE CHECK)
+=================================================
+Operating on Aarav's account (SBI-1001):
+  [OK] Deposited  Rs.2,500.00  | New balance: Rs.7,500.00
+  [OK] Withdrew   Rs.1,000.00  | New balance: Rs.6,500.00
+  [X] Withdrawal of Rs.999,999.00 DENIED - insufficient balance (Rs.6,500.00 available)
+  [X] Deposit failed: amount must be positive
+
+Operating on Diya's account (SBI-1002):
+  [OK] Deposited  Rs.750.00  | New balance: Rs.750.00
+  [X] Withdrawal of Rs.800.00 DENIED - insufficient balance (Rs.750.00 available)
+  [OK] Withdrew   Rs.300.00  | New balance: Rs.450.00
+
+=================================================
+ 4. FINAL STATE - COPY IS INDEPENDENT OF ORIGINAL
+=================================================
+Original (modified after copying):
+  +--------------------------------------+
+  | A/C No : SBI-1001                    |
+  | Holder : Aarav Sharma                |
+  | Balance: Rs.6,500.00                 |
+  +--------------------------------------+
+Copy (still holds the balance at copy time):
+  +--------------------------------------+
+  | A/C No : SBI-1001-COPY               |
+  | Holder : Aarav Sharma                |
+  | Balance: Rs.5,000.00                 |
+  +--------------------------------------+

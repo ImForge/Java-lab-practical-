@@ -1,0 +1,42 @@
+=================================================================
+ 1. LAMBDAS + STREAM API (filter / sort / group / partition)
+=================================================================
+  filter(marks >= 60) + sorted by marks desc:
+    Aarav   92  CSE
+    Meera   81  ME
+    Zara    74  CSE
+    Diya    67  ECE
+
+  groupingBy(dept)        : {CSE=[Aarav, Kabir, Zara], ECE=[Diya, Ishan], ME=[Meera]}
+  partitioningBy(>= 40)   : PASS=[Aarav, Diya, Meera, Ishan, Zara]  FAIL=[Kabir]
+  average marks (mapToInt): 67.83
+
+=================================================================
+ 2. OPTIONAL - handling null safely
+=================================================================
+  Topper (ifPresent)      : Aarav with 92
+  CIVIL student present?  : false
+  map().orElse() fallback : <no CIVIL student found>
+
+=================================================================
+ 3. PRODUCER-CONSUMER (Thread class + Runnable, wait/notify)
+=================================================================
+    [Producer] produced item-1  (buffer size: 1)
+    [Consumer] consumed item-1 (buffer size: 0)
+    [Producer] produced item-2  (buffer size: 1)
+    [Producer] produced item-3  (buffer size: 2)
+    [Consumer] consumed item-2 (buffer size: 1)
+    [Producer] produced item-4  (buffer size: 2)
+    [Producer] produced item-5  (buffer size: 3)
+    [Consumer] consumed item-3 (buffer size: 2)
+    [Producer] produced item-6  (buffer size: 3)
+    [Consumer] consumed item-4 (buffer size: 2)
+    [Consumer] consumed item-5 (buffer size: 1)
+    [Consumer] consumed item-6 (buffer size: 0)
+  Buffer capacity was 3 - producer blocked whenever it was full.
+
+=================================================================
+ 4. RACE CONDITION on shared balance - then fixed with synchronized
+=================================================================
+  WITHOUT synchronized : expected 200000, got 139974  <-- updates were LOST
+  WITH synchronized    : expected 200000, got 200000  <-- every update counted

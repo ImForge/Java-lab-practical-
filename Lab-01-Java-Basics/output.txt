@@ -1,0 +1,49 @@
+==============================================
+ (1) PATTERN PRINTING USING NESTED LOOPS
+==============================================
+
+--- Star Pyramid (5 rows) ---
+    *
+   ***
+  *****
+ *******
+*********
+
+--- Number Triangle (5 rows) ---
+1 
+1 2 
+1 2 3 
+1 2 3 4 
+1 2 3 4 5 
+
+--- Inverted Triangle (5 rows) ---
+# # # # # 
+# # # # 
+# # # 
+# # 
+# 
+
+==============================================
+ (2) FACTORIAL USING RECURSION
+==============================================
+0! = 1
+1! = 1
+5! = 120
+10! = 3628800
+15! = 1307674368000
+
+==============================================
+ (3) PRIME NUMBERS IN A RANGE
+==============================================
+Primes between 1 and 50 : 2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 
+Total primes found : 15
+Primes between 90 and 120 : 97 101 103 107 109 113 
+Total primes found : 6
+
+==============================================
+ (4) STRING REVERSAL (NO BUILT-IN METHODS)
+==============================================
+Original : "Java"  ->  Reversed : "avaJ"
+Original : "Hello World"  ->  Reversed : "dlroW olleH"
+Original : "racecar"  ->  Reversed : "racecar"
+Original : "A"  ->  Reversed : "A"

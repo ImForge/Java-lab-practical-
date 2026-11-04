@@ -1,0 +1,30 @@
+===========================================================
+ 1. INTERFACE CONTRACT - area() & perimeter() for each shape
+===========================================================
+  Circle     | area =      78.54 | perimeter =      31.42
+  Rectangle  | area =      24.00 | perimeter =      22.00
+  Triangle   | area =       6.00 | perimeter =      12.00
+
+===========================================================
+ 2. ABSTRACT CLASS - concrete describe() inherited by subclasses
+===========================================================
+  I am a Rectangle, a polygon with 4 sides.
+  I am a Triangle, a polygon with 3 sides.
+  (Circle has no describe(): it is not a Polygon - by design.)
+
+===========================================================
+ 3. MULTIPLE INTERFACE IMPLEMENTATION - Shape + Drawable
+===========================================================
+  Drawing Circle    : ( O )  radius=5.0
+  Drawing Rectangle : [=====]  8.0 x 3.0
+  Circle implements Shape AND Drawable directly;
+  Rectangle gets Shape via Polygon and adds Drawable - both legal.
+
+===========================================================
+ 4. INTERFACE vs ABSTRACT CLASS - observed comparison
+===========================================================
+  Interface Shape   : only a contract (area/perimeter) + default method;
+                      a class may implement MANY interfaces.
+  Abstract Polygon  : holds STATE (sides) + concrete describe();
+                      a class may extend ONLY ONE abstract class.
+  Polymorphism works through both: Shape[] held all three shapes above.

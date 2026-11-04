@@ -1,0 +1,47 @@
+=========================================================
+ 1. CONSTRUCTOR CHAINING VIA super (observe call order)
+=========================================================
+Creating new ElectricCar("Tata", 200, 4, 40):
+  [Vehicle constructor] brand=Tata
+  [Car constructor] doors=4
+  [ElectricCar constructor] battery=40 kWh
+
+=========================================================
+ 2. METHOD OVERRIDING AT EACH LEVEL
+=========================================================
+  [Vehicle constructor] brand=Generic
+  [Vehicle constructor] brand=Maruti Swift
+  [Car constructor] doors=4
+plainVehicle.start():
+  Vehicle.start()      -> Generic vehicle is starting...
+swift.start():
+  Car.start()          -> Turning ignition key... engine started!
+nexonEV.start():
+  ElectricCar.start()  -> Silent start... battery system online!
+
+=========================================================
+ 3. super KEYWORD - describe() reuses parent versions
+=========================================================
+nexonEV.describe() walks UP the chain using super:
+  Vehicle.describe()   -> Tata | top speed 200 km/h
+  Car.describe()       -> a 4-door car
+  ElectricCar.describe() -> 40 kWh battery, zero emissions
+
+=========================================================
+ 4. DYNAMIC METHOD DISPATCH (runtime polymorphism)
+=========================================================
+One Vehicle[] reference array, three different runtime types:
+-> static type: Vehicle | runtime type: Vehicle
+  Vehicle.start()      -> Generic vehicle is starting...
+-> static type: Vehicle | runtime type: Car
+  Car.start()          -> Turning ignition key... engine started!
+-> static type: Vehicle | runtime type: ElectricCar
+  ElectricCar.start()  -> Silent start... battery system online!
+
+=========================================================
+ 5. FINAL METHOD - inherited everywhere, overridable nowhere
+=========================================================
+  Vehicle.registrationInfo() [FINAL] -> RTO registration applies to every Vehicle
+  Vehicle.registrationInfo() [FINAL] -> RTO registration applies to every Car
+  Vehicle.registrationInfo() [FINAL] -> RTO registration applies to every ElectricCar
+  (See source comment: overriding registrationInfo() fails to compile.)

@@ -1,0 +1,37 @@
+=============================================================
+ 1. STRING OPERATIONS
+=============================================================
+  "madam" is palindrome? true
+  "Java" is palindrome? false
+  "A man, a plan, a canal: Panama" is palindrome? true
+
+  Sentence   : "Java makes string handling simple and Java is everywhere"
+  Word count : 9
+  Char frequency (letters only): {a=1, g=2, i=1, m=2, n=1, o=1, p=1, r=2}
+
+=============================================================
+ 2. String vs StringBuffer vs StringBuilder (20,000 appends)
+=============================================================
+  String        (immutable)          :     81 ms
+  StringBuffer  (mutable, sync)      :      2 ms
+  StringBuilder (mutable, non-sync)  :      1 ms
+  => String is slowest because every += builds a brand-new object.
+
+=============================================================
+ 3. BufferedWriter / BufferedReader - student records
+=============================================================
+  Wrote 3 records to students.txt
+  Reading them back line by line:
+    ID 101  | Aarav Sharma    | marks 88.5
+    ID 102  | Diya Patel      | marks 92.0
+    ID 103  | Kabir Singh     | marks 76.25
+
+=============================================================
+ 4. SERIALIZATION / DESERIALIZATION of a Student object
+=============================================================
+  Before serialization : Student{id=104, name='Meera Iyer', marks=95.5, sessionToken=TOKEN-XYZ-123}
+  Object written to student.ser (94 bytes)
+  After deserialization: Student{id=104, name='Meera Iyer', marks=95.5, sessionToken=null}
+  Note: sessionToken is null - 'transient' fields are skipped.
+
+  (Demo files students.txt and student.ser cleaned up.)

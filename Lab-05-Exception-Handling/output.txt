@@ -1,0 +1,36 @@
+==========================================================
+ 1. CUSTOM InvalidMarksException + try-catch-finally
+==========================================================
+  Aarav scored 92 -> Grade A+
+    (finally) record for Aarav processed.
+
+  [CAUGHT InvalidMarksException] Marks -5 for Diya are out of range (0-100)
+    (finally) record for Diya processed.
+
+  [CAUGHT InvalidMarksException] Marks 104 for Kabir are out of range (0-100)
+    (finally) record for Kabir processed.
+
+==========================================================
+ 2. UNCHECKED ArithmeticException (divide by zero)
+==========================================================
+  [CAUGHT ArithmeticException] / by zero -> subject count cannot be zero
+
+==========================================================
+ 3. UNCHECKED ArrayIndexOutOfBoundsException
+==========================================================
+  Accessing scores[5] in an array of length 3...
+  [CAUGHT ArrayIndexOutOfBoundsException] Index 5 out of bounds for length 3
+
+==========================================================
+ 4. CHECKED IOException (file that does not exist)
+==========================================================
+  [CAUGHT IOException] marks_database_missing.txt (The system cannot find the file specified)
+
+==========================================================
+ 5. MULTI-CATCH - one handler, several exception types
+==========================================================
+  [MULTI-CATCH] handled ArithmeticException : / by zero
+  [MULTI-CATCH] handled ArrayIndexOutOfBoundsException : Index 9 out of bounds for length 2
+  [SEPARATE CATCH] handled NullPointerException
+
+  All scenarios handled - program terminated NORMALLY (exit code 0).

@@ -1,0 +1,53 @@
+=================================================================
+ PART A - JDBC: driver types, CRUD, Callable, batch, savepoint
+=================================================================
+  Conceptual comparison of the 4 JDBC driver types:
+  +------+---------------------------+----------------------------------------+
+  | Type | Name                      | How it works / verdict                 |
+  +------+---------------------------+----------------------------------------+
+  |  1   | JDBC-ODBC bridge          | Java->ODBC->DB. Removed in Java 8. Dead|
+  |  2   | Native-API driver         | Java->C client lib->DB. Platform-bound |
+  |  3   | Network-protocol driver   | Java->middleware server->DB. Flexible  |
+  |  4   | Thin (pure Java) driver   | Java->DB wire protocol directly.       |
+  |      |                           | Portable & fastest -> USED TODAY       |
+  +------+---------------------------+----------------------------------------+
+  MySQL Connector/J is a Type-4 thin driver.
+
+  Connected: 8.0.45
+  CallableStatement topper_count(80) -> 1
+  Batch insert -> 10 rows in one shot.
+  Savepoint demo: bonus kept, bad update rolled back.
+  First 5 rows:
+    1 | Aarav | 96.0
+    2 | Student2 | 52.0
+    3 | Student3 | 53.0
+    4 | Student4 | 54.0
+    5 | Student5 | 55.0
+  HikariCP pool configuration shown in source (external jar needed).
+
+=================================================================
+ PART B - Collectors, flatMap, reduce, Optional chaining
+=================================================================
+  groupingBy(grade)     : {A=[Aarav, Diya], B=[Meera], C=[Ishan], F=[Kabir]}
+  partitioningBy(pass)  : pass=4, fail=1
+  joining(names)        : [Aarav, Diya, Kabir, Meera, Ishan]
+  flatMap(courses)      : [CAD, DBMS, DSA, DSP, OS, Thermo, VLSI]
+  reduce(sum of marks)  : 340
+  Optional chain (Meera): ME
+  Optional chain (Nil)  : <unknown>
+
+=================================================================
+ PART C - Record immutability + sealed Shape hierarchy
+=================================================================
+  record toString()     : StudentR[id=1, name=Aarav, marks=92.0]
+  auto equals()         : s1.equals(s2) = true
+  accessor              : s1.marks() = 92.0
+  IMMUTABLE             : no setters exist; s1.marks = 50 won't compile.
+  'withMarks' pattern   : StudentR[id=1, name=Aarav, marks=99.0]  (a NEW object - original untouched)
+  compact-ctor guard    : rejected marks=150 -> marks must be 0-100
+
+  sealed ShapeS -> Circle r=5.0       area =    78.54
+  sealed ShapeS -> Rectangle 8.0x3.0  area =    24.00
+  sealed ShapeS -> Triangle b=6.0     area =    12.00
+  Only Circle/Rectangle/Triangle may implement ShapeS - the compiler
+  rejects any other subclass (see commented Pentagon in source).
