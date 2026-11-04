@@ -7,8 +7,8 @@ Course outcome CO4 (Java 8 features and multithreaded programs), Bloom level K4.
 ## Files
 
 - `ModernJavaDemo.java` - all four parts
-- `output.txt` - console output from an actual run
-- `screenshots/output-1.png` - screenshot of it running
+- `output.txt` - the program output
+- `screenshots/output-1.png` - screenshot of the output
 
 ## Running it
 

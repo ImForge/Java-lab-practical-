@@ -7,8 +7,8 @@ Course outcome CO2 (apply interfaces and abstract classes for modular design), B
 ## Files
 
 - `ShapeDemo.java` - the interfaces, the abstract class, three shapes, and a driver
-- `output.txt` - console output from an actual run
-- `screenshots/output-1.png` - screenshot of it running
+- `output.txt` - the program output
+- `screenshots/output-1.png` - screenshot of the output
 
 ## Running it
 

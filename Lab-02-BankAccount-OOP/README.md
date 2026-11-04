@@ -7,8 +7,8 @@ Course outcome CO1 (implement OOP fundamentals with classes, objects, and constr
 ## Files
 
 - `BankAccountDemo.java` - the `BankAccount` class plus a `BankAccountDemo` driver
-- `output.txt` - console output from an actual run
-- `screenshots/output-1.png` - screenshot of it running
+- `output.txt` - the program output
+- `screenshots/output-1.png` - screenshot of the output
 
 ## Running it
 

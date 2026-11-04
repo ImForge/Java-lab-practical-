@@ -7,8 +7,8 @@ Course outcome CO4 (use the Collections Framework for data management), Bloom le
 ## Files
 
 - `InventorySystem.java` - `Product` and `Order` classes plus the driver
-- `output.txt` - console output from an actual run
-- `screenshots/output-1.png` - screenshot of it running
+- `output.txt` - the program output
+- `screenshots/output-1.png` - screenshot of the output
 
 ## Running it
 

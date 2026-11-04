@@ -7,8 +7,8 @@ Course outcome CO2 (apply inheritance and polymorphism), Bloom level K3.
 ## Files
 
 - `VehicleHierarchy.java` - the three classes plus a driver
-- `output.txt` - console output from an actual run
-- `screenshots/output-1.png` - screenshot of it running
+- `output.txt` - the program output
+- `screenshots/output-1.png` - screenshot of the output
 
 ## Running it
 

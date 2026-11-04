@@ -4,13 +4,13 @@ Three parts. Part A covers advanced JDBC: the four driver types, a `CallableStat
 
 Course outcome CO5 (database-connected Java plus advanced features including records and sealed classes), Bloom level K4.
 
-Everything ran for real. Parts B and C are plain Java 17; Part A connected to a running MySQL 8.0.45 server via Connector/J 8.4.0 (database `college`, user `labuser`) and actually ran the stored procedure, batch, and savepoint transaction.
+Parts B and C use plain Java 17. Part A connects to MySQL 8.0.45 (database `college`, user `labuser`) through Connector/J 8.4.0 for the stored procedure, batch, and savepoint transaction.
 
 ## Files
 
 - `AdvancedJavaDemo.java` - all three parts
-- `output.txt` - captured output from the live run
-- `screenshots/output-1.png` - screenshot of it running
+- `output.txt` - the program output
+- `screenshots/output-1.png` - screenshot of the output
 
 ## Running it
 

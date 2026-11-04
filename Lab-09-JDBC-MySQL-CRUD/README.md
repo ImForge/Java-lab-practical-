@@ -4,13 +4,13 @@ A Java program that connects to MySQL, creates a `student` table, and runs full 
 
 Course outcome CO5 (database-connected Java applications with JDBC), Bloom level K4.
 
-This was run against a real MySQL 8.0.45 server (database `college`, user `labuser`) using Connector/J 8.4.0. The screenshot and `output.txt` are the genuine result - the table was really created, filled, batched, and transacted.
+It connects to MySQL 8.0.45 (database `college`, user `labuser`) through Connector/J 8.4.0.
 
 ## Files
 
 - `StudentJDBC.java` - the full program, all four techniques
-- `output.txt` - captured output from the live run
-- `screenshots/output-1.png` - screenshot of it running
+- `output.txt` - the program output
+- `screenshots/output-1.png` - screenshot of the output
 
 ## Setup and running
 

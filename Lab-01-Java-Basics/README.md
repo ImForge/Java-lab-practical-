@@ -7,8 +7,8 @@ Course outcome CO1 (understand the Java environment and basic constructs), Bloom
 ## Files
 
 - `BasicPrograms.java` - all four programs, each in its own method called from `main`
-- `output.txt` - console output from an actual run
-- `screenshots/output-1.png` - screenshot of it running
+- `output.txt` - the program output
+- `screenshots/output-1.png` - screenshot of the output
 
 ## Running it
 

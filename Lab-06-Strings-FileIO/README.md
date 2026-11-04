@@ -7,8 +7,8 @@ Course outcome CO3 (string operations and file I/O), Bloom level K3.
 ## Files
 
 - `StringFileOps.java` - all four parts plus a serializable `Student` class
-- `output.txt` - console output from an actual run
-- `screenshots/output-1.png` - screenshot of it running
+- `output.txt` - the program output
+- `screenshots/output-1.png` - screenshot of the output
 
 The program creates `students.txt` and `student.ser` while it runs and deletes them at the end, so the folder stays clean.
 

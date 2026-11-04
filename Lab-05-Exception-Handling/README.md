@@ -7,8 +7,8 @@ Course outcome CO3 (implement robust exception handling), Bloom level K3.
 ## Files
 
 - `GradeSystem.java` - the custom exception and five scenarios
-- `output.txt` - console output from an actual run
-- `screenshots/output-1.png` - screenshot of it running
+- `output.txt` - the program output
+- `screenshots/output-1.png` - screenshot of the output
 
 ## Running it
 

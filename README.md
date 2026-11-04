@@ -2,7 +2,7 @@
 
 Solutions for all ten Java lab experiments. Each lab sits in its own folder with the source code, a screenshot of it running, the captured console output, and a README explaining the code and the result.
 
-Everything here was actually compiled and run on Windows 11 with JDK 17 (Temurin). The screenshots are real terminal captures, not mock-ups. Labs 9 and 10 were run against a live MySQL 8.0.45 server.
+The programs were compiled and run with JDK 17 on Windows 11, and each lab folder has a screenshot of its output. Labs 9 and 10 use MySQL 8.0.45 through the JDBC driver.
 
 ## Folder layout
 
